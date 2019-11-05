@@ -1,0 +1,61 @@
+CREATE OR REPLACE TRIGGER dodanie_rezerwacji
+    AFTER INSERT
+    ON REZERWACJE
+    FOR EACH ROW
+    BEGIN
+       INSERT INTO REZERWACJE_LOG (ID_REZERWACJI, DATA, STATUS)
+            VALUES (:NEW.NR_REZERWACJI, CURRENT_DATE, :NEW.STATUS);
+
+       UPDATE WYCIECZKI w
+        SET LICZBA_WOLNYCH_MIEJSC = LICZBA_WOLNYCH_MIEJSC - 1
+        WHERE w.ID_WYCIECZKI = :NEW.ID_WYCIECZKI;
+    END;
+
+----
+
+CREATE OR REPLACE TRIGGER zmiana_statusu
+    AFTER UPDATE
+    ON REZERWACJE
+    FOR EACH ROW
+    DECLARE
+        tmp INT;
+    BEGIN
+       INSERT INTO REZERWACJE_LOG (ID_REZERWACJI, DATA, STATUS)
+            VALUES (:NEW.NR_REZERWACJI, CURRENT_DATE, :NEW.STATUS);
+
+       tmp := 0;
+       IF :OLD.STATUS = 'A' AND :NEW.STATUS <> 'A'
+           THEN
+            tmp := -1;
+       END IF;
+
+       IF :OLD.STATUS <> 'A' AND :NEW.STATUS = 'A'
+           THEN
+            tmp := 1;
+       END IF;
+
+       UPDATE WYCIECZKI w
+            SET LICZBA_WOLNYCH_MIEJSC = LICZBA_WOLNYCH_MIEJSC + tmp
+            WHERE w.ID_WYCIECZKI = :NEW.ID_WYCIECZKI;
+       END;
+
+----
+
+CREATE OR REPLACE TRIGGER usuniecie_rezerwacji
+    BEFORE DELETE
+    ON REZERWACJE
+    FOR EACH ROW
+    BEGIN
+        raise_application_error(-20900, 'Nie mozna usuwac rezerwacji');
+    END;
+
+----
+
+CREATE OR REPLACE TRIGGER zmiana_liczby_miejsc
+    BEFORE UPDATE OF LICZBA_MIEJSC
+    ON WYCIECZKI
+    FOR EACH ROW
+BEGIN
+    SELECT :OLD.LICZBA_WOLNYCH_MIEJSC + (:NEW.LICZBA_MIEJSC - :OLD.LICZBA_MIEJSC) INTO :NEW.LICZBA_WOLNYCH_MIEJSC
+    FROM Dual;
+END;
