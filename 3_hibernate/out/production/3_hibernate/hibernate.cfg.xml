@@ -12,5 +12,7 @@
     <property name="hbm2ddl.auto">create-drop</property>
     <mapping class="Product"></mapping>
     <mapping class="Supplier"></mapping>
+    <mapping class="Category"></mapping>
+    <mapping class="Invoice"></mapping>
 </session-factory>
 </hibernate-configuration>

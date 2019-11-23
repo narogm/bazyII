@@ -7,7 +7,7 @@ public class Supplier {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int ID;
+    private int SupplierID;
 
     private String CompanyName;
     private String Street;
@@ -26,6 +26,10 @@ public class Supplier {
     }
 
     public void addProduct(Product newProduct){
+        products.add(newProduct);
+    }
+
+    public void addProductAndInform(Product newProduct){
         products.add(newProduct);
         newProduct.setSupplier(this);
     }

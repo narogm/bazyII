@@ -1,11 +1,5 @@
 import org.hibernate.*;
-import org.hibernate.query.Query;
 import org.hibernate.cfg.Configuration;
-
-import javax.persistence.metamodel.EntityType;
-
-import java.util.Map;
-import java.util.Scanner;
 
 public class Main {
     private static final SessionFactory ourSessionFactory;
@@ -42,28 +36,52 @@ public class Main {
             session.save(product2);
             session.save(product3);
 
-            Supplier supplier = new Supplier("SuppCompany", "MainStreet", "SomeCity");
-            session.save(supplier);
-            supplier.addProduct(product1);
-            supplier.addProduct(product2);
-            supplier.addProduct(product3);
+            Invoice invoice1 = new Invoice(456);
+            Invoice invoice2 = new Invoice(321);
 
-//            Product foundProduct = session.get(Product.class, 1);
-//            foundProduct.setSupplier(supplier);
+            session.save(invoice1);
+            session.save(invoice2);
+
+            invoice1.addProductAndInform(product1);
+            invoice1.addProductAndInform(product2);
+            product3.addInvoiceAndInform(invoice1);
+
+            System.out.println("Products in invoice1:");
+            invoice1.getIncludedProducts().forEach(System.out::println);
+
+            product2.addInvoiceAndInform(invoice2);
+
+            System.out.println("\nProduct2's invoices:");
+            product2.getInvoices().forEach(System.out::println);
+
+//            Category category1 = new Category("FirstCategory");
+//            Category category2 = new Category("SecondCategory");
+//
+//            session.save(category1);
+//            session.save(category2);
+//
+//            category1.addProductAndInform(product1);
+//            category1.addProductAndInform(product2);
+//
+//            category2.addProductAndInform(product3);
+//
+//            System.out.println("Products in category1:");
+//            category1.getProducts().forEach(System.out::println);
+//
+//            System.out.println("\nCategory for product3: " + product3.getCategory());
+
+//            Supplier supplier = new Supplier("SuppCompany", "MainStreet", "SomeCity");
+//            session.save(supplier);
+//            supplier.addProductAndInform(product1);
+//            supplier.addProductAndInform(product2);
+//
+//            Supplier supplier2 = new Supplier("SecondCompany", "OtherStreet", "SomeCity");
+//            session.save(supplier2);
+//            supplier2.addProductAndInform(product3);
+
             tx.commit();
         } finally {
             session.close();
         }
     }
 }
-
-//            System.out.println("querying all the managed entities...");
-//            final Metamodel metamodel = session.getSessionFactory().getMetamodel();
-//            for (EntityType<?> entityType : metamodel.getEntities()) {
-//                final String entityName = entityType.getName();
-//                final Query query = session.createQuery("from " + entityName);
-//                System.out.println("executing: " + query.getQueryString());
-//                for (Object o : query.list()) {
-//                    System.out.println("  " + o);
-//                }
-//            }

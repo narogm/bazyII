@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="Apache Derby (Remote) - jdbc:derby://127.0.0.1/MNarogJPA" uuid="4917f972-aa32-406e-9d91-eee4b4f9c12c">
+    <data-source source="LOCAL" name="jdbc:derby://127.0.0.1/MNarogJPA" uuid="2a27e046-469f-48dd-a2ab-8b89b9d38414">
       <driver-ref>derby.remote</driver-ref>
       <synchronize>true</synchronize>
       <configured-by-url>true</configured-by-url>
