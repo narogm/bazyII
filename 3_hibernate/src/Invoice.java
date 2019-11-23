@@ -37,4 +37,9 @@ public class Invoice {
     public Set<Product> getIncludedProducts() {
         return includedProducts;
     }
+
+    @Override
+    public String toString(){
+        return "Invoice with number: " + InvoiceNumber;
+    }
 }

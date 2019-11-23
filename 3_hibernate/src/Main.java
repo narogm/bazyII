@@ -1,6 +1,11 @@
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
+import javax.persistence.Persistence;
+
 public class Main {
     private static final SessionFactory ourSessionFactory;
 
@@ -20,13 +25,15 @@ public class Main {
     }
 
     public static void main(final String[] args) throws Exception {
+        Main app = new Main();
+
+//        app.HibernateVersion();
+        app.JPAversion();
+    }
+
+    public void HibernateVersion(){
         final Session session = getSession();
         try {
-//            System.out.println("Podaj nazwe produktu oraz jego ilosc");
-//            Scanner inputScanner = new Scanner(System.in);
-//            String prodName = inputScanner.nextLine();
-//            int prodUnits = Integer.parseInt(inputScanner.nextLine());
-
             Product product1 = new Product("koszulka", 5);
             Product product2 = new Product("spodnie", 2);
             Product product3 = new Product("kurtka", 3);
@@ -83,5 +90,33 @@ public class Main {
         } finally {
             session.close();
         }
+    }
+
+    public void JPAversion(){
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myDatabaseConfig");
+        EntityManager em = emf.createEntityManager();
+        EntityTransaction etx = em.getTransaction();
+        etx.begin();
+//do something
+
+        Product product1 = new Product("koszulka", 5);
+        Product product2 = new Product("spodnie", 2);
+        Product product3 = new Product("kurtka", 3);
+
+        Category category1 = new Category("FirstCategory");
+        Category category2 = new Category("SecondCategory");
+
+        category1.addProductAndInform(product1);
+        category1.addProductAndInform(product2);
+
+        category2.addProductAndInform(product3);
+
+        System.out.println("Products in category1:");
+        category1.getProducts().forEach(System.out::println);
+
+        System.out.println("\nCategory for product3: " + product3.getCategory());
+
+        etx.commit();
+        em.close();
     }
 }
