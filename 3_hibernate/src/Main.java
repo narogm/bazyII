@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
+import java.util.List;
 
 public class Main {
     private static final SessionFactory ourSessionFactory;
@@ -93,29 +94,62 @@ public class Main {
     }
 
     public void JPAversion(){
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("myDatabaseConfig");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("derby");
         EntityManager em = emf.createEntityManager();
         EntityTransaction etx = em.getTransaction();
         etx.begin();
-//do something
-
         Product product1 = new Product("koszulka", 5);
         Product product2 = new Product("spodnie", 2);
-        Product product3 = new Product("kurtka", 3);
+//        Product product3 = new Product("kurtka", 3);
 
-        Category category1 = new Category("FirstCategory");
-        Category category2 = new Category("SecondCategory");
+        Supplier supplier = new Supplier("SuppCompany", "MainStreet", "SomeCity","33-333","123456789");
+        Customer customer = new Customer("CustCompany","OtherStreet","SecondCity","44-444",0.1);
 
-        category1.addProductAndInform(product1);
-        category1.addProductAndInform(product2);
+        em.persist(supplier);
+        em.persist(customer);
 
-        category2.addProductAndInform(product3);
+        List<Company> allCompanies = em.createQuery("from Company").getResultList();
+        for(Company company: allCompanies){
+            company.getCompanyType();
+        }
+//        Address address = new Address("MainStreet", "SomeCity");
+//        Supplier supplier = new Supplier("SuppCompany", address);
 
-        System.out.println("Products in category1:");
-        category1.getProducts().forEach(System.out::println);
+//        Supplier supplier = new Supplier("SuppCompany", "MainStreet", "SomeCity","33-333");
+//        supplier.addProductAndInform(product1);
+//        supplier.addProductAndInform(product2);
+//
+//        em.persist(product1);
+//        em.persist(product2);
+//        em.persist(supplier);
 
-        System.out.println("\nCategory for product3: " + product3.getCategory());
+//        Invoice invoice1 = new Invoice(456);
+//        Invoice invoice2 = new Invoice(321);
+//
+//        invoice1.addProductAndInform(product1);
+//        invoice1.addProductAndInform(product2);
+//
+//        product3.addInvoiceAndInform(invoice2);
+//
+//        em.persist(invoice1);
+//        em.persist(product3);
 
+        //        Category category1 = new Category("FirstCategory");
+//        Category category2 = new Category("SecondCategory");
+//        em.persist(product1);
+//        em.persist(product2);
+//        em.persist(product3);
+//        em.persist(category1);
+//        em.persist(category2);
+//
+//        category1.addProductAndInform(product1);
+//        category1.addProductAndInform(product2);
+//
+//        category2.addProductAndInform(product3);
+//
+//        System.out.println("Products in category1:");
+//        category1.getProducts().forEach(System.out::println);
+//        System.out.println("\nCategory for product3: " + product3.getCategory());
         etx.commit();
         em.close();
     }

@@ -18,7 +18,7 @@ public class Product {
     @ManyToOne
     private Category category;
 
-    @ManyToMany
+    @ManyToMany(cascade = CascadeType.PERSIST)
     private Set<Invoice> Invoices = new HashSet<>();
 
     public Product (){}
