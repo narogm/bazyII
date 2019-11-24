@@ -54,4 +54,9 @@ public class Supplier extends Company{
     public void getCompanyType() {
         System.out.println("Supplier with company name: " + companyName);
     }
+
+    @Override
+    public String toString(){
+        return "Supplier: " + companyName;
+    }
 }

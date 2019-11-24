@@ -18,4 +18,9 @@ public class Customer extends Company{
     public void getCompanyType() {
         System.out.println("Customer with company name: " + companyName);
     }
+
+    @Override
+    public String toString(){
+        return "Customer: " + companyName;
+    }
 }

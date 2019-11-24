@@ -57,7 +57,7 @@ public class Product {
 
     @Override
     public String toString(){
-        return "Product " + ProductName + " with ID " + ProductID;
+        return ProductName + " supplied by " + String.valueOf(supplier);
     }
 
     public String getCategory() {
